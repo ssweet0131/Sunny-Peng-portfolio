@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Sunny Peng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fdf8f8; --ink: #2d2a2e; --muted: #a89faa; --line: #ecdfe8;
+      --pink: #f2c4ce; --blue: #c4d8f2; --green: #c4e0d2;
+      --pink-soft: #faedf0; --blue-soft: #edf3fa; --green-soft: #edf5f0;
+      --accent-pink: #d98ca0; --accent-blue: #7aaad4; --accent-green: #6aab8a;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--ink);
+      font-family: var(--mono); font-size: 13px; font-weight: 300;
+      letter-spacing: 0.02em; line-height: 1.7; cursor: none; overflow-x: hidden;
+      animation: pageIn 0.5s ease forwards;
+    }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--accent-pink); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transition: transform 0.15s ease, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.hover { transform: translate(-50%, -50%) scale(3); background: var(--accent-blue); }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; background: var(--bg);
+      border-bottom: 1px solid transparent; transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--line); }
+    .nav-logo {
+      font-family: var(--serif); font-size: 25px; font-weight: 300;
+      text-decoration: none; color: var(--ink);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sun-icon { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.7s ease; }
+    .nav-logo:hover .sun-icon { transform: rotate(45deg); }
+    .sun-core { fill: none; stroke: #e8b84b; stroke-width: 1.6; transition: fill 0.3s; }
+    .nav-logo:hover .sun-core { fill: rgba(232,184,75,0.14); }
+    .sun-ray { stroke: #e8b84b; stroke-width: 1.6; stroke-linecap: round; }
+    .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-links > li > a { text-decoration: none; color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links > li > a:hover { color: var(--ink); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle { text-decoration: none; color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; display: flex; align-items: center; gap: 5px; cursor: none; }
+    .nav-dropdown-toggle::after { content: '▾'; font-size: 9px; transition: transform 0.2s; }
+    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ink); }
+    .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 2px); left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--bg); border: 1px solid var(--line); border-radius: 4px;
+      min-width: 200px; padding: 8px 0;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 8px 24px rgba(45,42,46,0.07);
+    }
+    .nav-dropdown-menu::before { content: ''; position: absolute; bottom: 100%; left: 0; right: 0; height: 10px; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 9px 18px; text-decoration: none; font-size: 11px; letter-spacing: 0.06em; text-transform: none; color: var(--muted); transition: color 0.15s, background 0.15s; white-space: nowrap; }
+    .nav-dropdown-menu a:hover { color: var(--ink); background: var(--pink-soft); }
+    .nav-dropdown-menu a.blue-hover:hover { background: var(--blue-soft); }
+    .nav-dropdown-menu a.green-hover:hover { background: var(--green-soft); }
+
+    /* ── About Hero ── */
+    .about-hero {
+      min-height: 60vh; display: flex; align-items: flex-end;
+      padding: 120px 72px 64px; border-bottom: 1px solid var(--line);
+    }
+    .about-hero-inner { max-width: 800px; }
+    .about-eyebrow {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent-pink); margin-bottom: 24px;
+      overflow: hidden; white-space: nowrap; width: 0;
+      border-right: 2px solid var(--accent-pink);
+      animation: typing 1.6s steps(28, end) 0.3s forwards,
+                 blink 0.65s step-end 0.3s 5,
+                 removeCursor 0.1s ease 3.6s forwards;
+    }
+    @keyframes typing { from { width: 0; opacity: 1; } to { width: 24ch; opacity: 1; } }
+    @keyframes blink { 0%, 100% { border-color: var(--accent-pink); } 50% { border-color: transparent; } }
+    @keyframes removeCursor { to { border-color: transparent; } }
+    .about-headline {
+      font-family: var(--serif); font-size: clamp(52px, 7vw, 100px); font-weight: 300;
+      line-height: 1; letter-spacing: -0.02em; margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.25s forwards;
+    }
+    .about-headline em { font-style: italic; color: var(--muted); }
+    .about-headline .grad {
+      background: linear-gradient(95deg, var(--accent-pink) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .about-intro {
+      font-family: var(--serif); font-size: 22px; font-weight: 300; line-height: 1.6;
+      color: var(--muted); max-width: 620px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .about-intro strong { color: var(--ink); font-weight: 300; }
+
+    /* ── Sections ── */
+    .about-section { padding: 88px 48px; }
+    #about-me { background: var(--pink-soft); }
+    #my-life  { background: var(--blue-soft); }
+    #my-value { background: var(--bg); }
+
+    .section-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 56px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+    }
+    #about-me .section-header { border-color: var(--pink); }
+    #my-life .section-header  { border-color: var(--blue); }
+    #my-value .section-header { border-color: var(--line); }
+
+    .section-title { font-family: var(--serif); font-size: 42px; font-weight: 300; letter-spacing: -0.01em; }
+    #about-me .section-title { color: var(--accent-pink); }
+    #my-life .section-title  { color: var(--accent-blue); }
+    #my-value .section-title {
+      background: linear-gradient(95deg, var(--accent-pink) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .section-tag { font-size: 13px; color: var(--muted); }
+
+    /* ── About Me ── */
+    .about-me-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .about-me-portrait { position: relative; border-radius: 4px; overflow: hidden; }
+    .about-me-portrait-placeholder { width: 100%; padding-top: 120%; background: #f5dce3; position: relative; border-radius: 4px; }
+    .about-me-portrait-placeholder::before { content: ''; position: absolute; width: 55%; height: 55%; border-radius: 50%; background: rgba(217,140,160,0.22); top: 18%; left: 12%; }
+    .about-me-portrait-placeholder::after  { content: ''; position: absolute; width: 30%; height: 50%; border-radius: 3px; background: rgba(217,140,160,0.12); top: 30%; left: 55%; }
+    .about-me-text { display: flex; flex-direction: column; gap: 32px; justify-content: center; }
+    .about-me-bio { font-family: var(--serif); font-size: 24px; font-weight: 300; line-height: 1.6; color: var(--ink); }
+    .about-me-bio strong { color: var(--accent-pink); font-weight: 300; }
+    .about-me-details { display: flex; flex-direction: column; }
+    .about-row { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .about-row-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .about-row-val { color: var(--ink); font-size: 12px; }
+
+    /* ── My Life ── */
+    .life-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .life-card { position: relative; overflow: hidden; border-radius: 4px; cursor: none; }
+    .life-placeholder { width: 100%; padding-top: 110%; position: relative; overflow: hidden; }
+    .life-card:nth-child(1) .life-placeholder { background: #f5dce3; }
+    .life-card:nth-child(2) .life-placeholder { background: #d3e4f5; }
+    .life-card:nth-child(3) .life-placeholder { background: #cce4d6; }
+    .life-card:nth-child(1) .life-placeholder::before { content: ''; position: absolute; width: 60%; height: 60%; border-radius: 50%; background: rgba(217,140,160,0.2); top: 15%; left: 10%; }
+    .life-card:nth-child(1) .life-placeholder::after  { content: ''; position: absolute; width: 35%; height: 50%; border-radius: 3px; background: rgba(217,140,160,0.1); top: 30%; left: 55%; }
+    .life-card:nth-child(2) .life-placeholder::before { content: ''; position: absolute; width: 55%; height: 55%; border-radius: 50%; background: rgba(122,170,212,0.22); top: 20%; left: 22%; }
+    .life-card:nth-child(3) .life-placeholder::before { content: ''; position: absolute; width: 50%; height: 50%; border-radius: 50%; background: rgba(122,184,154,0.2); top: 18%; left: 15%; }
+    .life-card:nth-child(3) .life-placeholder::after  { content: ''; position: absolute; width: 40%; height: 35%; border-radius: 2px; background: rgba(122,184,154,0.12); top: 50%; left: 35%; }
+    .life-placeholder::before, .life-placeholder::after { transition: transform 0.6s ease; }
+    .life-card:hover .life-placeholder::before { transform: scale(1.08) translate(3%, -3%); }
+    .life-overlay { position: absolute; inset: 0; background: rgba(45,42,46,0); display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; transition: background 0.4s; }
+    .life-card:hover .life-overlay { background: rgba(45,42,46,0.58); }
+    .life-info { transform: translateY(10px); opacity: 0; transition: all 0.35s; }
+    .life-card:hover .life-info { transform: translateY(0); opacity: 1; }
+    .life-emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+    .life-name { font-family: var(--serif); font-size: 26px; color: #fff; font-weight: 300; }
+    .life-desc { font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.6; margin-top: 8px; }
+
+    /* ── My Value ── */
+    .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .value-card { padding: 48px 40px 52px; border: 1px solid var(--line); position: relative; overflow: hidden; transition: background 0.35s, border-color 0.35s; }
+    .value-card:hover { background: #fff; border-color: var(--pink); }
+    .value-card:nth-child(2):hover { border-color: var(--accent-pink); }
+    .value-card:nth-child(3):hover { border-color: var(--blue); }
+    .value-card::before { content: ''; position: absolute; border-radius: 50%; pointer-events: none; transition: transform 0.6s ease, opacity 0.4s; opacity: 0; }
+    .value-card:hover::before { opacity: 1; transform: scale(1.1); }
+    .value-card:nth-child(1)::before { width: 220px; height: 220px; background: radial-gradient(circle, rgba(217,140,160,0.1) 0%, transparent 70%); bottom: -60px; right: -60px; }
+    .value-card:nth-child(2)::before { width: 200px; height: 200px; background: radial-gradient(circle, rgba(217,140,160,0.12) 0%, transparent 70%); top: -40px; left: -40px; }
+    .value-card:nth-child(3)::before { width: 220px; height: 220px; background: radial-gradient(circle, rgba(122,170,212,0.1) 0%, transparent 70%); bottom: -60px; left: -40px; }
+    .value-number { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-pink); margin-bottom: 28px; display: block; }
+    .value-card:nth-child(3) .value-number { color: var(--accent-blue); }
+    .value-headline { font-family: var(--serif); font-size: 28px; font-weight: 300; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 24px; color: var(--ink); }
+    .value-line { width: 32px; height: 1px; background: var(--pink); margin-bottom: 24px; display: block; transition: width 0.4s ease; }
+    .value-card:nth-child(3) .value-line { background: var(--blue); }
+    .value-card:hover .value-line { width: 56px; }
+    .value-body { color: var(--muted); line-height: 1.85; font-size: 12px; }
+
+    /* ── Footer ── */
+    footer { padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); background: var(--bg); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; align-items: center; }
+    .footer-links a { text-decoration: none; color: var(--muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .yt-link { position: relative; display: inline-block; }
+    .yt-tooltip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(4px); background: var(--pink-soft); color: var(--accent-pink); font-size: 10px; letter-spacing: 0.1em; white-space: nowrap; padding: 6px 12px; border: 1px solid var(--pink); border-radius: 2px; opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; z-index: 10; }
+    .yt-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--pink); }
+    .yt-link:hover .yt-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .about-hero { padding: 120px 24px 48px; }
+      .about-section { padding: 64px 24px; }
+      .about-me-grid { grid-template-columns: 1fr; gap: 40px; }
+      .life-grid { grid-template-columns: 1fr; }
+      .value-grid { grid-template-columns: 1fr; gap: 16px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">
+      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="sun-core" cx="12" cy="12" r="4.2"/>
+        <line class="sun-ray" x1="12" y1="1.5"  x2="12" y2="4.8"/>
+        <line class="sun-ray" x1="12" y1="19.2" x2="12" y2="22.5"/>
+        <line class="sun-ray" x1="1.5"  y1="12" x2="4.8"  y2="12"/>
+        <line class="sun-ray" x1="19.2" y1="12" x2="22.5" y2="12"/>
+        <line class="sun-ray" x1="4.4"  y1="4.4"  x2="6.6"  y2="6.6"/>
+        <line class="sun-ray" x1="17.4" y1="17.4" x2="19.6" y2="19.6"/>
+        <line class="sun-ray" x1="19.6" y1="4.4"  x2="17.4" y2="6.6"/>
+        <line class="sun-ray" x1="6.6"  y1="17.4" x2="4.4"  y2="19.6"/>
+      </svg>
+      Sunny Peng
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li class="nav-dropdown">
+        <a href="work.html" class="nav-dropdown-toggle">Work</a>
+        <div class="nav-dropdown-menu">
+          <a href="work.html#work-ux">UI / UX Design ၄၃˚</a>
+          <a href="work.html#work-graphic" class="blue-hover">Graphic Design ✿˚</a>
+          <a href="work.html#work-merchandise" class="green-hover">Merchandise ☘︎˚</a>
+        </div>
+      </li>
+      <li class="nav-dropdown">
+        <a href="about.html" class="nav-dropdown-toggle" style="color: var(--ink);">About</a>
+        <div class="nav-dropdown-menu">
+          <a href="#about-me">About Me *ੈ✩‧₊˚</a>
+          <a href="#my-life" class="blue-hover">My Life ⋆˙⟡♡</a>
+          <a href="#my-value" class="blue-hover">My Value ⊹.✮₊⋆</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <div class="about-hero">
+    <div class="about-hero-inner">
+      <p class="about-eyebrow">Nice to meet you ˚✧₊⁺</p>
+      <h1 class="about-headline">More than<br><em>just a</em><br><span class="grad">designer.</span></h1>
+      <p class="about-intro">
+        I'm Sunny — a designer who believes the best creative work comes from <strong>a life fully lived.</strong>
+        Here's a little of who I am, beyond the pixels.
+      </p>
+    </div>
+  </div>
+
+  <!-- About Me -->
+  <section class="about-section" id="about-me">
+    <div class="section-header reveal">
+      <h2 class="section-title">About Me</h2>
+      <span class="section-tag">*ੈ✩‧₊˚</span>
+    </div>
+    <div class="about-me-grid">
+      <div class="about-me-portrait reveal">
+        <div class="about-me-portrait-placeholder"></div>
+      </div>
+      <div class="about-me-text reveal">
+        <p class="about-me-bio">
+          I'm a <strong>UI/UX and Graphic Designer</strong> who believes great design should feel invisible — leaving only a seamless, meaningful experience behind.
+          <br><br>
+          I care deeply about the craft: the details, the rhythm, the way a layout breathes. Every pixel is a decision, and every decision tells a story.
+        </p>
+        <div class="about-me-details">
+          <div class="about-row"><span class="about-row-label">Location</span><span class="about-row-val">Brisbane, Queensland</span></div>
+          <div class="about-row"><span class="about-row-label">MBTI</span><span class="about-row-val">INFP-T</span></div>
+          <div class="about-row"><span class="about-row-label">Focus</span><span class="about-row-val">UI/UX, Brand, Visual Design</span></div>
+          <div class="about-row"><span class="about-row-label">Tools</span><span class="about-row-val">Figma, Illustrator, Canva</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- My Life -->
+  <section class="about-section" id="my-life">
+    <div class="section-header reveal">
+      <h2 class="section-title">My Life</h2>
+      <span class="section-tag">⋆˙⟡♡</span>
+    </div>
+    <div class="life-grid">
+      <div class="life-card reveal">
+        <div class="life-placeholder"></div>
+        <div class="life-overlay"><div class="life-info">
+          <span class="life-emoji">🎵</span>
+          <div class="life-name">Singing</div>
+          <p class="life-desc">Music taught me that emotion is the foundation of every great performance — and every great design. Singing is how I stay connected to feeling.</p>
+        </div></div>
+      </div>
+      <div class="life-card reveal">
+        <div class="life-placeholder"></div>
+        <div class="life-overlay"><div class="life-info">
+          <span class="life-emoji">🧱</span>
+          <div class="life-name">Building Lego</div>
+          <p class="life-desc">Every brick has a purpose. Lego taught me that constraints spark creativity — the patience of building something intricate by hand carries into how I design.</p>
+        </div></div>
+      </div>
+      <div class="life-card reveal">
+        <div class="life-placeholder"></div>
+        <div class="life-overlay"><div class="life-info">
+          <span class="life-emoji">✈️</span>
+          <div class="life-name">Travelling</div>
+          <p class="life-desc">Every city I visit reshapes how I see people — and how I design for them. The textures, colours, and rhythms of new places quietly find their way into everything I make.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- My Value -->
+  <section class="about-section" id="my-value">
+    <div class="section-header reveal">
+      <h2 class="section-title">My Value</h2>
+      <span class="section-tag">⊹.✮₊⋆</span>
+    </div>
+    <div class="value-grid">
+      <div class="value-card reveal">
+        <span class="value-number">01 — Mindset</span>
+        <h3 class="value-headline">Stay curious<br>to everything.</h3>
+        <span class="value-line"></span>
+        <p class="value-body">I'm someone who thrives on exploring new places, soaking up fresh experiences, and diving into exciting activities. Life is too short and too amazing to wait around — so there's no better time than now to seize every opportunity and make the most of it.</p>
+      </div>
+      <div class="value-card reveal">
+        <span class="value-number">02 — Drive</span>
+        <h3 class="value-headline">Bring passion to<br>everything you do.</h3>
+        <span class="value-line"></span>
+        <p class="value-body">Whether it's a small task or a big project, show up as your best self and dive in wholeheartedly. It's about giving 100% of your attention, effort, and curiosity — and letting your passion drive you forward.</p>
+      </div>
+      <div class="value-card reveal">
+        <span class="value-number">03 — Perspective</span>
+        <h3 class="value-headline">Appreciate the<br>beauty of design.</h3>
+        <span class="value-line"></span>
+        <p class="value-body">Design offers endless possibilities. Whether I'm creating a piece of my own or pausing to admire someone else's artwork, I always take a moment to dive into the details and appreciate the beauty within it.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Sunny Peng. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/jiaqian-peng-429333236/" target="_blank">LinkedIn</a>
+      <a href="https://www.youtube.com/@ssweet_0131" target="_blank" class="yt-link">
+        YouTube <span class="yt-tooltip">Channel coming soon ✦</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, .life-card, .value-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+    }
+  </script>
+</body>
+</html>

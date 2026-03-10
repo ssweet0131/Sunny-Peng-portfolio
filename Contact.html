@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Work — Sunny Peng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fdf8f8; --ink: #2d2a2e; --muted: #a89faa; --line: #ecdfe8;
+      --pink: #f2c4ce; --blue: #c4d8f2; --green: #c4e0d2;
+      --pink-soft: #faedf0; --blue-soft: #edf3fa; --green-soft: #edf5f0;
+      --accent-pink: #d98ca0; --accent-blue: #7aaad4; --accent-green: #6aab8a;
+      --sun: #e8b84b;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--ink);
+      font-family: var(--mono); font-size: 13px; font-weight: 300;
+      letter-spacing: 0.02em; line-height: 1.7;
+      cursor: none; overflow-x: hidden;
+      animation: pageIn 0.5s ease forwards;
+    }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--accent-pink); border-radius: 50%;
+      pointer-events: none; z-index: 99999;
+      transition: transform 0.15s ease, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.hover { transform: translate(-50%, -50%) scale(3); background: var(--accent-blue); }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; background: var(--bg);
+      border-bottom: 1px solid transparent; transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--line); }
+    .nav-logo {
+      font-family: var(--serif); font-size: 25px; font-weight: 300;
+      text-decoration: none; color: var(--ink);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sun-icon { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.7s ease; }
+    .nav-logo:hover .sun-icon { transform: rotate(45deg); }
+    .sun-core { fill: none; stroke: var(--sun); stroke-width: 1.6; transition: fill 0.3s; }
+    .nav-logo:hover .sun-core { fill: rgba(232,184,75,0.14); }
+    .sun-ray { stroke: var(--sun); stroke-width: 1.6; stroke-linecap: round; }
+    .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-links > li > a {
+      text-decoration: none; color: var(--muted);
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links > li > a:hover { color: var(--ink); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      text-decoration: none; color: var(--ink);
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s; display: flex; align-items: center; gap: 5px; cursor: none;
+    }
+    .nav-dropdown-toggle.muted { color: var(--muted); }
+    .nav-dropdown-toggle::after { content: '▾'; font-size: 9px; transition: transform 0.2s; }
+    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ink); }
+    .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 2px); left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--bg); border: 1px solid var(--line); border-radius: 4px;
+      min-width: 200px; padding: 8px 0;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 8px 24px rgba(45,42,46,0.07);
+    }
+    .nav-dropdown-menu::before { content: ''; position: absolute; bottom: 100%; left: 0; right: 0; height: 10px; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a {
+      display: block; padding: 9px 18px; text-decoration: none;
+      font-size: 11px; letter-spacing: 0.06em; text-transform: none;
+      color: var(--muted); transition: color 0.15s, background 0.15s; white-space: nowrap;
+    }
+    .nav-dropdown-menu a:hover { color: var(--ink); background: var(--pink-soft); }
+    .nav-dropdown-menu a.blue-hover:hover { background: var(--blue-soft); }
+    .nav-dropdown-menu a.green-hover:hover { background: var(--green-soft); }
+
+    /* ── Work hero ── */
+    .work-hero {
+      min-height: 38vh; display: flex; align-items: flex-end;
+      padding: 120px 72px 52px; border-bottom: 1px solid var(--line);
+    }
+    .work-hero-eyebrow {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent-pink); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards;
+    }
+    .work-hero-title {
+      font-family: var(--serif); font-size: clamp(52px, 7vw, 96px);
+      font-weight: 300; line-height: 1; letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.7s ease 0.25s forwards;
+    }
+    .work-hero-title em { font-style: italic; color: var(--muted); }
+    .grad {
+      background: linear-gradient(95deg, var(--accent-pink) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── Section wrappers ── */
+    .work-section { padding: 88px 48px; }
+    #work-ux          { background: var(--pink-soft); }
+    #work-graphic     { background: var(--blue-soft); }
+    #work-merchandise { background: var(--green-soft); }
+
+    .section-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 48px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+    }
+    #work-ux .section-header          { border-color: var(--pink); }
+    #work-graphic .section-header     { border-color: var(--blue); }
+    #work-merchandise .section-header { border-color: var(--green); }
+    .section-title { font-family: var(--serif); font-size: 42px; font-weight: 300; letter-spacing: -0.01em; }
+    #work-ux .section-title          { color: var(--accent-pink); }
+    #work-graphic .section-title     { color: var(--accent-blue); }
+    #work-merchandise .section-title { color: var(--accent-green); }
+    .section-count { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* ── Work grid ── */
+    .work-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+
+    /* UI/UX spans */
+    #work-ux .work-card:nth-child(1) { grid-column: span 7; }
+    #work-ux .work-card:nth-child(2) { grid-column: span 5; }
+    /* Graphic spans — 4 cards: 6+6 on first row, 5+7 on second */
+    #work-graphic .work-card:nth-child(1) { grid-column: span 5; }
+    #work-graphic .work-card:nth-child(2) { grid-column: span 7; }
+    #work-graphic .work-card:nth-child(3) { grid-column: span 7; }
+    #work-graphic .work-card:nth-child(4) { grid-column: span 5; }
+    /* Merchandise spans */
+    #work-merchandise .work-card:nth-child(1) { grid-column: span 7; }
+    #work-merchandise .work-card:nth-child(2) { grid-column: span 5; }
+    #work-merchandise .work-card:nth-child(3) { grid-column: span 12; }
+
+    /* ── Card ── */
+    .work-card {
+      position: relative; border-radius: 6px; overflow: hidden;
+      cursor: none; display: block; text-decoration: none;
+    }
+
+    /* Flat colour cover */
+    .card-cover {
+      width: 100%; padding-top: 72%;
+      position: relative; overflow: hidden;
+    }
+    #work-ux .work-card:nth-child(2) .card-cover,
+    #work-graphic .work-card:nth-child(1) .card-cover,
+    #work-graphic .work-card:nth-child(4) .card-cover,
+    #work-merchandise .work-card:nth-child(2) .card-cover { padding-top: 88%; }
+    #work-merchandise .work-card:nth-child(3) .card-cover { padding-top: 38%; }
+
+    /* Backgrounds — UI/UX */
+    #work-ux .work-card:nth-child(1) .card-cover { background: #f5dce3; }
+    #work-ux .work-card:nth-child(2) .card-cover { background: #ecd3dc; }
+    /* Backgrounds — Graphic */
+    #work-graphic .work-card:nth-child(1) .card-cover { background: #d3e4f5; }
+    #work-graphic .work-card:nth-child(2) .card-cover { background: #ccdaf0; }
+    #work-graphic .work-card:nth-child(3) .card-cover { background: #c5d5ed; }
+    #work-graphic .work-card:nth-child(4) .card-cover { background: #d8e4f5; }
+    /* Backgrounds — Merchandise */
+    #work-merchandise .work-card:nth-child(1) .card-cover { background: #cce0d6; }
+    #work-merchandise .work-card:nth-child(2) .card-cover { background: #bdd9cc; }
+    #work-merchandise .work-card:nth-child(3) .card-cover { background: #d0e8dd; }
+
+    /* ── Hover overlay with info ── */
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: rgba(45,42,46,0);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 28px 28px 28px;
+      transition: background 0.4s;
+    }
+    .work-card:hover .card-overlay { background: rgba(45,42,46,0.60); }
+
+    .card-info {
+      transform: translateY(12px); opacity: 0;
+      transition: transform 0.38s ease, opacity 0.38s ease;
+    }
+    .work-card:hover .card-info { transform: translateY(0); opacity: 1; }
+
+    /* H1 — project name */
+    .card-title {
+      font-family: var(--serif); font-size: 28px; font-weight: 300;
+      color: #fff; line-height: 1.1; margin-bottom: 10px;
+    }
+    /* H2 — three key themes as pill tags */
+    .card-themes {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+    }
+    .card-theme {
+      font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.75);
+      padding: 3px 9px; border-radius: 20px;
+    }
+    /* H2.1 — short description */
+    .card-desc {
+      font-size: 11px; color: rgba(255,255,255,0.6);
+      line-height: 1.65; margin-bottom: 16px; max-width: 340px;
+    }
+    /* View project link */
+    .card-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: gap 0.2s;
+    }
+    #work-ux .card-link          { color: var(--pink); }
+    #work-graphic .card-link     { color: var(--blue); }
+    #work-merchandise .card-link { color: var(--green); }
+    .card-link:hover { gap: 14px; }
+
+    /* ── Project Panel ── */
+    .proj-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .proj-overlay.open { opacity: 1; pointer-events: all; }
+
+    .proj-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(45,42,46,0.5); backdrop-filter: blur(8px);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .proj-overlay.open .proj-backdrop { opacity: 1; }
+
+    .proj-panel {
+      position: relative; z-index: 1;
+      width: 100%; height: 92vh;
+      background: var(--bg); border-radius: 16px 16px 0 0;
+      display: grid; grid-template-columns: 1fr 400px;
+      overflow: hidden;
+      transform: translateY(100%);
+      transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 -16px 64px rgba(45,42,46,0.14);
+    }
+    .proj-overlay.open .proj-panel { transform: translateY(0); }
+
+    /* ── Left: image viewer ── */
+    .proj-left {
+      position: relative; display: flex; flex-direction: column;
+      overflow: hidden; background: var(--line);
+    }
+
+    .proj-img-main {
+      flex: 1; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--pink-soft); transition: background 0.4s;
+    }
+    .proj-img-main.blue  { background: var(--blue-soft); }
+    .proj-img-main.green { background: var(--green-soft); }
+
+    .proj-img-main img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: contain; opacity: 0; transition: opacity 0.4s ease;
+      padding: 0;
+    }
+    .proj-img-main.has-image img { opacity: 1; }
+
+    /* drag + upload hint */
+    .proj-upload-hint {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; text-align: center; padding: 24px;
+      pointer-events: none; user-select: none;
+      transition: color 0.25s, transform 0.25s; color: var(--muted);
+    }
+    .proj-img-main.has-image .proj-upload-hint { display: none; }
+    .proj-img-main.dragging .proj-upload-hint { color: var(--accent-pink); transform: scale(1.05); }
+
+    .upload-circle {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 1px dashed currentColor; display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 200; transition: border-color 0.25s, transform 0.3s;
+    }
+    .proj-img-main.dragging .upload-circle { transform: scale(1.1); }
+    .upload-hint-main { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .upload-hint-sub  { font-size: 10px; color: var(--line); letter-spacing: 0.06em; }
+
+    .proj-img-main input[type="file"] {
+      position: absolute; inset: 0; opacity: 0;
+      width: 100%; height: 100%; cursor: pointer; z-index: 3;
+    }
+
+    /* slide counter */
+    .proj-img-counter {
+      position: absolute; top: 16px; left: 20px; z-index: 4;
+      font-size: 10px; letter-spacing: 0.1em; color: rgba(255,255,255,0.7);
+      background: rgba(45,42,46,0.35); padding: 4px 10px; border-radius: 20px;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .proj-img-main.has-image .proj-img-counter { opacity: 1; }
+
+    /* arrow nav */
+    .proj-img-arrows {
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: space-between;
+      padding: 0 14px; pointer-events: none; z-index: 4;
+    }
+    .proj-img-arrow {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.85); border: none; cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--ink); pointer-events: all;
+      opacity: 0; transform: scale(0.85);
+      transition: opacity 0.25s, transform 0.25s, background 0.2s;
+    }
+    .proj-img-main.has-image:hover .proj-img-arrow { opacity: 1; transform: scale(1); }
+    .proj-img-arrow:hover { background: #fff; }
+
+    /* Dot nav */
+    .proj-dots {
+      position: absolute; bottom: 14px; left: 50%;
+      transform: translateX(-50%); display: flex; gap: 7px; z-index: 4;
+    }
+    .proj-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.4); cursor: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .proj-dot.active { background: #fff; transform: scale(1.4); }
+
+    /* Thumbnail strip */
+    .proj-thumbs {
+      display: flex; gap: 3px; height: 82px; flex-shrink: 0;
+      background: var(--line);
+    }
+    .proj-thumb {
+      flex: 1; position: relative; overflow: hidden; cursor: none;
+      background: var(--pink-soft); transition: opacity 0.2s;
+    }
+    .proj-thumb.blue  { background: var(--blue-soft); }
+    .proj-thumb.green { background: var(--green-soft); }
+    .proj-thumb.active::after {
+      content: ''; position: absolute; inset: 0;
+      border: 2px solid var(--accent-pink);
+      pointer-events: none;
+    }
+    .proj-thumb.active.blue::after  { border-color: var(--accent-blue); }
+    .proj-thumb.active.green::after { border-color: var(--accent-green); }
+    .proj-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.3s; }
+    .proj-thumb.has-image img { opacity: 1; }
+    .proj-thumb input[type="file"] {
+      position: absolute; inset: 0; opacity: 0;
+      width: 100%; height: 100%; cursor: pointer; z-index: 2;
+    }
+    .proj-thumb-hint {
+      position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; font-size: 20px; font-weight: 200;
+      color: var(--muted); pointer-events: none; transition: color 0.2s;
+    }
+    .proj-thumb:hover .proj-thumb-hint { color: var(--ink); }
+    .proj-thumb.has-image .proj-thumb-hint { display: none; }
+
+    /* ── Right: info ── */
+    .proj-right {
+      display: flex; flex-direction: column;
+      border-left: 1px solid var(--line); overflow: hidden;
+    }
+
+    .proj-right-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 24px 18px; border-bottom: 1px solid var(--line); flex-shrink: 0;
+    }
+    .proj-nav-pills { display: flex; gap: 7px; }
+    .proj-nav-pill {
+      background: none; border: 1px solid var(--line); border-radius: 20px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); padding: 5px 13px; cursor: none; transition: all 0.2s;
+    }
+    .proj-nav-pill:hover { border-color: var(--muted); color: var(--ink); }
+    .proj-close {
+      background: none; border: 1px solid var(--line); border-radius: 50%;
+      font-size: 14px; color: var(--muted); cursor: none;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .proj-close:hover { border-color: var(--ink); color: var(--ink); }
+
+    .proj-info { padding: 28px 24px; flex: 1; overflow-y: auto; }
+
+    /* staggered entrance animations */
+    .proj-eyebrow {
+      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-pink); margin-bottom: 10px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
+    }
+    .proj-eyebrow.blue  { color: var(--accent-blue); }
+    .proj-eyebrow.green { color: var(--accent-green); }
+    .proj-overlay.open .proj-eyebrow { opacity: 1; transform: translateY(0); }
+
+    .proj-name {
+      font-family: var(--serif); font-size: 40px; font-weight: 300;
+      letter-spacing: -0.02em; line-height: 1; margin-bottom: 18px;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.45s ease 0.16s, transform 0.45s ease 0.16s;
+    }
+    .proj-overlay.open .proj-name { opacity: 1; transform: translateY(0); }
+
+    .proj-divider {
+      width: 28px; height: 1px; background: var(--line); margin-bottom: 18px;
+      opacity: 0; transition: opacity 0.4s ease 0.22s, width 0.5s ease 0.22s;
+    }
+    .proj-overlay.open .proj-divider { opacity: 1; width: 44px; }
+
+    .proj-desc {
+      font-size: 12px; line-height: 1.85; color: var(--muted); margin-bottom: 26px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.45s ease 0.28s, transform 0.45s ease 0.28s;
+    }
+    .proj-overlay.open .proj-desc { opacity: 1; transform: translateY(0); }
+
+    .proj-meta {
+      display: flex; flex-direction: column; gap: 12px; margin-bottom: 26px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.45s ease 0.35s, transform 0.45s ease 0.35s;
+    }
+    .proj-overlay.open .proj-meta { opacity: 1; transform: translateY(0); }
+    .proj-meta-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding-bottom: 10px; border-bottom: 1px solid var(--line);
+    }
+    .proj-meta-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .proj-meta-val { font-family: var(--serif); font-size: 16px; font-weight: 300; color: var(--ink); }
+
+    .proj-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.45s ease 0.42s, transform 0.45s ease 0.42s;
+    }
+    .proj-overlay.open .proj-tags { opacity: 1; transform: translateY(0); }
+    .proj-tag {
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid var(--line); color: var(--muted);
+      padding: 4px 11px; border-radius: 20px; transition: border-color 0.2s, color 0.2s;
+    }
+    .proj-tag:hover { border-color: var(--muted); color: var(--ink); }
+
+    .proj-kb-hint {
+      padding: 14px 24px; border-top: 1px solid var(--line); flex-shrink: 0;
+      display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+      font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--line);
+    }
+    .kb-key {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid var(--line); border-radius: 3px;
+      width: 20px; height: 20px; font-size: 9px; color: var(--muted);
+    }
+    .kb-pair { display: flex; align-items: center; gap: 5px; color: var(--muted); }
+
+    /* ── Marquee ── */
+    .scroll-transition {
+      position: relative; height: 280px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; background: var(--bg);
+    }
+    .scroll-transition-track {
+      display: flex; gap: 80px; align-items: center;
+      white-space: nowrap;
+      animation: marquee 18s linear infinite; will-change: transform;
+    }
+    .scroll-transition-track span {
+      font-family: var(--serif); font-size: clamp(48px, 6vw, 88px);
+      font-weight: 300; letter-spacing: -0.02em;
+      color: transparent; -webkit-text-stroke: 1px var(--line);
+    }
+    .scroll-transition-track span.filled { color: var(--ink); -webkit-text-stroke: 0; }
+    .scroll-transition-track .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent-pink); flex-shrink: 0; display: inline-block;
+    }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .scroll-transition::before, .scroll-transition::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 160px; z-index: 2;
+    }
+    .scroll-transition::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .scroll-transition::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 24px 48px; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--line); background: var(--bg);
+      font-size: 10px; letter-spacing: 0.08em; color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { text-decoration: none; color: var(--muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .yt-link { position: relative; display: inline-block; }
+    .yt-tooltip {
+      position: absolute; bottom: calc(100% + 10px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: var(--pink-soft); color: var(--accent-pink);
+      font-size: 10px; white-space: nowrap; padding: 6px 12px;
+      border: 1px solid var(--pink); border-radius: 2px;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s, transform 0.22s; z-index: 10;
+    }
+    .yt-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--pink); }
+    .yt-link:hover .yt-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .work-hero { padding: 100px 24px 40px; }
+      .work-section { padding: 64px 24px; }
+      .work-card { grid-column: span 12 !important; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">
+      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="sun-core" cx="12" cy="12" r="4.2"/>
+        <line class="sun-ray" x1="12" y1="1.5"  x2="12" y2="4.8"/>
+        <line class="sun-ray" x1="12" y1="19.2" x2="12" y2="22.5"/>
+        <line class="sun-ray" x1="1.5"  y1="12" x2="4.8"  y2="12"/>
+        <line class="sun-ray" x1="19.2" y1="12" x2="22.5" y2="12"/>
+        <line class="sun-ray" x1="4.4"  y1="4.4"  x2="6.6"  y2="6.6"/>
+        <line class="sun-ray" x1="17.4" y1="17.4" x2="19.6" y2="19.6"/>
+        <line class="sun-ray" x1="19.6" y1="4.4"  x2="17.4" y2="6.6"/>
+        <line class="sun-ray" x1="6.6"  y1="17.4" x2="4.4"  y2="19.6"/>
+      </svg>
+      Sunny Peng
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li class="nav-dropdown">
+        <a href="work.html" class="nav-dropdown-toggle">Work</a>
+        <div class="nav-dropdown-menu">
+          <a href="#work-ux">UI / UX Design ၄၃˚</a>
+          <a href="#work-graphic" class="blue-hover">Graphic Design ✿˚</a>
+          <a href="#work-merchandise" class="green-hover">Merchandise ☘︎˚</a>
+        </div>
+      </li>
+      <li class="nav-dropdown">
+        <a href="about.html" class="nav-dropdown-toggle muted">About</a>
+        <div class="nav-dropdown-menu">
+          <a href="about.html#about-me">About Me *ੈ✩‧₊˚</a>
+          <a href="about.html#my-life" class="blue-hover">My Life ⋆˙⟡♡</a>
+          <a href="about.html#my-value" class="blue-hover">My Value ⊹.✮₊⋆</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero strip -->
+  <div class="work-hero">
+    <div>
+      <p class="work-hero-eyebrow">Selected works</p>
+      <h1 class="work-hero-title">Where ideas<br><em>become</em><br><span class="grad">reality.</span></h1>
+    </div>
+  </div>
+
+  <!-- ══════════════ UI / UX DESIGN ══════════════ -->
+  <section class="work-section" id="work-ux">
+    <div class="section-header reveal">
+      <h2 class="section-title">UI / UX Design</h2>
+      <span class="section-count">02 projects</span>
+    </div>
+    <div class="work-grid">
+
+      <!-- Luminary Finance -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">Luminary Finance</div>
+            <div class="card-themes">
+              <span class="card-theme">Data Visualisation</span>
+              <span class="card-theme">Trust &amp; Clarity</span>
+              <span class="card-theme">Interaction Design</span>
+            </div>
+            <p class="card-desc">A web app redesign that makes complex financial data feel approachable — clean dashboards, intuitive flows, and a calm visual language.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orbit Mobile App -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">Orbit Mobile App</div>
+            <div class="card-themes">
+              <span class="card-theme">Design System</span>
+              <span class="card-theme">Motion &amp; Feedback</span>
+              <span class="card-theme">Accessibility</span>
+            </div>
+            <p class="card-desc">A mobile UX project built around a modular design system — consistent components, fluid transitions, and an interface that guides without interrupting.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ GRAPHIC DESIGN ══════════════ -->
+  <section class="work-section" id="work-graphic">
+    <div class="section-header reveal">
+      <h2 class="section-title">Graphic Design</h2>
+      <span class="section-count">04 projects</span>
+    </div>
+    <div class="work-grid">
+
+      <!-- ACYA UQ -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">ACYA UQ</div>
+            <div class="card-themes">
+              <span class="card-theme">Cultural Identity</span>
+              <span class="card-theme">Brand System</span>
+              <span class="card-theme">Print &amp; Digital</span>
+            </div>
+            <p class="card-desc">Visual identity for ACYA UQ — a brand system rooted in cultural heritage, balancing tradition with a modern, student-led voice.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- UQIES -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">UQIES</div>
+            <div class="card-themes">
+              <span class="card-theme">Editorial Layout</span>
+              <span class="card-theme">Typography</span>
+              <span class="card-theme">Publication Design</span>
+            </div>
+            <p class="card-desc">Editorial design for UQIES — a publication that balances rigorous content with visual elegance, using typography as the primary design tool.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ECOSOI -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">ECOSOI</div>
+            <div class="card-themes">
+              <span class="card-theme">Campaign Design</span>
+              <span class="card-theme">Sustainability</span>
+              <span class="card-theme">Visual Storytelling</span>
+            </div>
+            <p class="card-desc">A graphic campaign for ECOSOI — visual storytelling around sustainability, using organic forms and a restrained palette to carry an environmental message.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEDxUQ -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">TEDxUQ</div>
+            <div class="card-themes">
+              <span class="card-theme">Event Branding</span>
+              <span class="card-theme">Motion Graphics</span>
+              <span class="card-theme">Ideation &amp; Concept</span>
+            </div>
+            <p class="card-desc">Visual design for TEDxUQ — developing an event brand identity that captures the energy of ideas worth spreading, from stage graphics to printed collateral.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ MERCHANDISE ══════════════ -->
+  <section class="work-section" id="work-merchandise">
+    <div class="section-header reveal">
+      <h2 class="section-title">Merchandise</h2>
+      <span class="section-count">03 projects</span>
+    </div>
+    <div class="work-grid">
+
+      <!-- Project One -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">Project One</div>
+            <div class="card-themes">
+              <span class="card-theme">Apparel Design</span>
+              <span class="card-theme">Screen Print</span>
+              <span class="card-theme">Brand Extension</span>
+            </div>
+            <p class="card-desc">Merchandise design bridging brand identity and wearable art — screen-printed apparel that carries the organisation's visual language into everyday life.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Two -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">Project Two</div>
+            <div class="card-themes">
+              <span class="card-theme">Illustration</span>
+              <span class="card-theme">Pattern Design</span>
+              <span class="card-theme">Limited Edition</span>
+            </div>
+            <p class="card-desc">Hand-drawn illustration adapted for merchandise — a limited-edition collection where botanical motifs become the centerpiece of a cohesive product line.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Three -->
+      <div class="work-card reveal">
+        <div class="card-cover">
+</div>
+        <div class="card-overlay">
+          <div class="card-info">
+            <div class="card-title">Project Three</div>
+            <div class="card-themes">
+              <span class="card-theme">Packaging</span>
+              <span class="card-theme">Structural Design</span>
+              <span class="card-theme">Unboxing Experience</span>
+            </div>
+            <p class="card-desc">Packaging design that treats the unboxing as part of the brand experience — structural form, tactile material choices, and considered print finishing.</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Project Panel ── -->
+  <div class="proj-overlay" id="projOverlay">
+    <div class="proj-backdrop" id="projBackdrop"></div>
+    <div class="proj-panel">
+
+      <!-- LEFT: image viewer -->
+      <div class="proj-left">
+        <div class="proj-img-main" id="projImgMain">
+          <input type="file" accept="image/*" id="mainFileInput"/>
+          <img id="mainImg" alt=""/>
+          <div class="proj-upload-hint">
+            <div class="upload-circle">+</div>
+            <span class="upload-hint-main">Drop or click to add image</span>
+            <span class="upload-hint-sub">PNG, JPG, WEBP</span>
+          </div>
+          <div class="proj-img-counter" id="imgCounter">1 / 3</div>
+          <div class="proj-img-arrows">
+            <button class="proj-img-arrow" id="imgPrev">‹</button>
+            <button class="proj-img-arrow" id="imgNext">›</button>
+          </div>
+          <div class="proj-dots" id="projDots">
+            <div class="proj-dot active" data-i="0"></div>
+            <div class="proj-dot" data-i="1"></div>
+            <div class="proj-dot" data-i="2"></div>
+          </div>
+        </div>
+
+        <!-- Thumbnail strip -->
+        <div class="proj-thumbs">
+          <div class="proj-thumb active" id="thumb0">
+            <input type="file" accept="image/*" id="file0"/>
+            <img id="timg0" alt=""/>
+            <div class="proj-thumb-hint">+</div>
+          </div>
+          <div class="proj-thumb" id="thumb1">
+            <input type="file" accept="image/*" id="file1"/>
+            <img id="timg1" alt=""/>
+            <div class="proj-thumb-hint">+</div>
+          </div>
+          <div class="proj-thumb" id="thumb2">
+            <input type="file" accept="image/*" id="file2"/>
+            <img id="timg2" alt=""/>
+            <div class="proj-thumb-hint">+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: info -->
+      <div class="proj-right">
+        <div class="proj-right-header">
+          <div class="proj-nav-pills">
+            <button class="proj-nav-pill" id="projPrev">← Prev</button>
+            <button class="proj-nav-pill" id="projNext">Next →</button>
+          </div>
+          <button class="proj-close" id="projClose">✕</button>
+        </div>
+
+        <div class="proj-info">
+          <div class="proj-eyebrow" id="projEyebrow">Graphic Design</div>
+          <div class="proj-name" id="projName">—</div>
+          <div class="proj-divider"></div>
+          <p class="proj-desc" id="projDesc">—</p>
+          <div class="proj-meta" id="projMeta">
+            <div class="proj-meta-row">
+              <span class="proj-meta-label">Production date</span>
+              <span class="proj-meta-val" id="projDate">—</span>
+            </div>
+            <div class="proj-meta-row">
+              <span class="proj-meta-label">Category</span>
+              <span class="proj-meta-val" id="projCategory">—</span>
+            </div>
+          </div>
+          <div class="proj-tags" id="projTagsEl"></div>
+        </div>
+
+        <div class="proj-kb-hint">
+          <span class="kb-pair"><span class="kb-key">←</span><span class="kb-key">→</span> navigate</span>
+          <span class="kb-pair"><span class="kb-key">Esc</span> close</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="scroll-transition">
+    <div class="scroll-transition-track" id="marqueeTrack">
+      <span class="filled">Design</span><span class="dot"></span>
+      <span>Passion</span><span class="dot"></span>
+      <span class="filled">Craft</span><span class="dot"></span>
+      <span>Intention</span><span class="dot"></span>
+      <span class="filled">Human-centred</span><span class="dot"></span>
+      <span>Innovation</span><span class="dot"></span>
+      <span class="filled">Design</span><span class="dot"></span>
+      <span>Passion</span><span class="dot"></span>
+      <span class="filled">Craft</span><span class="dot"></span>
+      <span>Intention</span><span class="dot"></span>
+      <span class="filled">Human-centred</span><span class="dot"></span>
+      <span>Innovation</span><span class="dot"></span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <span>© 2026 Sunny Peng. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/jiaqian-peng-429333236/" target="_blank">LinkedIn</a>
+      <a href="https://www.youtube.com/@ssweet_0131" target="_blank" class="yt-link">
+        YouTube <span class="yt-tooltip">Channel coming soon ✦</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // ── Cursor ──
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, .work-card, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    window.addEventListener('scroll', () =>
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20)
+    );
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+    }
+
+    const track = document.getElementById('marqueeTrack');
+    track.innerHTML += track.innerHTML;
+
+    // ── Project data ──
+    const projectList = [
+      'Luminary Finance','Orbit Mobile App',
+      'ACYA UQ','UQIES','ECOSOI','TEDxUQ',
+      'Project One','Project Two','Project Three'
+    ];
+
+    const projects = {
+      'Luminary Finance': {
+        tags: ['Data Visualisation','Trust & Clarity','Interaction Design'],
+        date: 'March 2024', category: 'UI / UX Design',
+        desc: 'A web app redesign that makes complex financial data feel approachable — clean dashboards, intuitive flows, and a calm visual language.',
+        accent: 'pink'
+      },
+      'Orbit Mobile App': {
+        tags: ['Design System','Motion & Feedback','Accessibility'],
+        date: 'November 2023', category: 'UI / UX Design',
+        desc: 'A mobile UX project built around a modular design system — consistent components, fluid transitions, and an interface that guides without interrupting.',
+        accent: 'pink'
+      },
+      'ACYA UQ': {
+        tags: ['Cultural Identity','Brand System','Print & Digital'],
+        date: 'July 2024', category: 'Graphic Design',
+        desc: 'Visual identity for ACYA UQ — a brand system rooted in cultural heritage, balancing tradition with a modern, student-led voice.',
+        accent: 'blue'
+      },
+      'UQIES': {
+        tags: ['Editorial Layout','Typography','Publication Design'],
+        date: 'April 2023', category: 'Graphic Design',
+        desc: 'Editorial design for UQIES — a publication that balances rigorous content with visual elegance, using typography as the primary design tool.',
+        accent: 'blue'
+      },
+      'ECOSOI': {
+        tags: ['Campaign Design','Sustainability','Visual Storytelling'],
+        date: 'September 2023', category: 'Graphic Design',
+        desc: 'A graphic campaign for ECOSOI — visual storytelling around sustainability, using organic forms and a restrained palette to carry an environmental message.',
+        accent: 'blue'
+      },
+      'TEDxUQ': {
+        tags: ['Event Branding','Motion Graphics','Ideation & Concept'],
+        date: 'October 2023', category: 'Graphic Design',
+        desc: 'Visual design for TEDxUQ — developing an event brand identity that captures the energy of ideas worth spreading, from stage graphics to printed collateral.',
+        accent: 'blue'
+      },
+      'Project One': {
+        tags: ['Apparel Design','Screen Print','Brand Extension'],
+        date: 'February 2024', category: 'Merchandise',
+        desc: "Merchandise design bridging brand identity and wearable art — screen-printed apparel that carries the organisation's visual language into everyday life.",
+        accent: 'green'
+      },
+      'Project Two': {
+        tags: ['Illustration','Pattern Design','Limited Edition'],
+        date: 'May 2024', category: 'Merchandise',
+        desc: 'Hand-drawn illustration adapted for merchandise — a limited-edition collection where botanical motifs become the centrepiece of a cohesive product line.',
+        accent: 'green'
+      },
+      'Project Three': {
+        tags: ['Packaging','Structural Design','Unboxing Experience'],
+        date: 'August 2023', category: 'Merchandise',
+        desc: 'Packaging design that treats the unboxing as part of the brand experience — structural form, tactile material choices, and considered print finishing.',
+        accent: 'green'
+      }
+    };
+
+    // ── Image state per project ──
+    const imageStore = {}; // name -> [url, url, url]
+    let currentProject = null;
+    let currentSlide = 0;
+
+    // ── DOM refs ──
+    const overlay     = document.getElementById('projOverlay');
+    const projImgMain = document.getElementById('projImgMain');
+    const mainImg     = document.getElementById('mainImg');
+    const imgCounter  = document.getElementById('imgCounter');
+    const projDots    = document.getElementById('projDots').querySelectorAll('.proj-dot');
+    const thumbEls    = [0,1,2].map(i => document.getElementById('thumb' + i));
+    const timgEls     = [0,1,2].map(i => document.getElementById('timg' + i));
+    const fileInputs  = [0,1,2].map(i => document.getElementById('file' + i));
+    const mainFileInput = document.getElementById('mainFileInput');
+
+    // ── Accent helpers ──
+    function applyAccent(accent) {
+      projImgMain.classList.remove('blue','green','pink');
+      thumbEls.forEach(t => { t.classList.remove('blue','green'); });
+      if (accent === 'blue')  { projImgMain.classList.add('blue');  thumbEls.forEach(t => t.classList.add('blue')); }
+      if (accent === 'green') { projImgMain.classList.add('green'); thumbEls.forEach(t => t.classList.add('green')); }
+      const eyebrow = document.getElementById('projEyebrow');
+      eyebrow.classList.remove('blue','green');
+      if (accent === 'blue')  eyebrow.classList.add('blue');
+      if (accent === 'green') eyebrow.classList.add('green');
+      thumbEls.forEach(t => { t.classList.remove('active'); });
+      thumbEls[0].classList.add('active');
+    }
+
+    // ── Show slide ──
+    function showSlide(i) {
+      const images = imageStore[currentProject] || [null,null,null];
+      currentSlide = i;
+      if (images[i]) {
+        mainImg.src = images[i];
+        projImgMain.classList.add('has-image');
+      } else {
+        mainImg.src = '';
+        projImgMain.classList.remove('has-image');
+      }
+      imgCounter.textContent = (i + 1) + ' / 3';
+      projDots.forEach((d, di) => d.classList.toggle('active', di === i));
+      thumbEls.forEach((t, ti) => t.classList.toggle('active', ti === i));
+    }
+
+    // ── Upload image ──
+    function readFile(file, index) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        if (!imageStore[currentProject]) imageStore[currentProject] = [null,null,null];
+        imageStore[currentProject][index] = e.target.result;
+        timgEls[index].src = e.target.result;
+        thumbEls[index].classList.add('has-image');
+        showSlide(index);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Main frame file input
+    mainFileInput.addEventListener('change', function() {
+      if (this.files[0]) readFile(this.files[0], currentSlide);
+    });
+
+    // Thumb file inputs
+    fileInputs.forEach((inp, i) => {
+      inp.addEventListener('change', function() {
+        if (this.files[0]) readFile(this.files[0], i);
+      });
+    });
+
+    // Thumb click to switch slide (when has image)
+    thumbEls.forEach((thumb, i) => {
+      thumb.addEventListener('click', () => showSlide(i));
+    });
+
+    // Drag-and-drop on main frame
+    projImgMain.addEventListener('dragover', e => {
+      e.preventDefault(); projImgMain.classList.add('dragging');
+    });
+    projImgMain.addEventListener('dragleave', () => projImgMain.classList.remove('dragging'));
+    projImgMain.addEventListener('drop', e => {
+      e.preventDefault(); projImgMain.classList.remove('dragging');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) readFile(file, currentSlide);
+    });
+
+    // Arrow nav (image slots)
+    document.getElementById('imgPrev').addEventListener('click', e => {
+      e.stopPropagation(); showSlide((currentSlide + 2) % 3);
+    });
+    document.getElementById('imgNext').addEventListener('click', e => {
+      e.stopPropagation(); showSlide((currentSlide + 1) % 3);
+    });
+
+    // Dot nav
+    document.getElementById('projDots').querySelectorAll('.proj-dot').forEach(dot => {
+      dot.addEventListener('click', e => {
+        e.stopPropagation(); showSlide(parseInt(dot.dataset.i));
+      });
+    });
+
+    // ── Open panel ──
+    function openProject(name) {
+      const p = projects[name];
+      if (!p) return;
+      currentProject = name;
+      currentSlide = 0;
+
+      // Populate info
+      document.getElementById('projEyebrow').textContent = p.category;
+      document.getElementById('projName').textContent = name;
+      document.getElementById('projDesc').textContent = p.desc;
+      document.getElementById('projDate').textContent = p.date;
+      document.getElementById('projCategory').textContent = p.category;
+      document.getElementById('projTagsEl').innerHTML = p.tags.map(t =>
+        '<span class="proj-tag">' + t + '</span>'
+      ).join('');
+
+      // Restore thumbnails
+      const images = imageStore[name] || [null,null,null];
+      timgEls.forEach((img, i) => {
+        if (images[i]) { img.src = images[i]; thumbEls[i].classList.add('has-image'); }
+        else { img.src = ''; thumbEls[i].classList.remove('has-image'); }
+      });
+
+      applyAccent(p.accent);
+      showSlide(0);
+
+      // Prev/Next project buttons
+      const idx = projectList.indexOf(name);
+      document.getElementById('projPrev').disabled = idx === 0;
+      document.getElementById('projPrev').style.opacity = idx === 0 ? '0.3' : '1';
+      document.getElementById('projNext').disabled = idx === projectList.length - 1;
+      document.getElementById('projNext').style.opacity = idx === projectList.length - 1 ? '0.3' : '1';
+
+      document.body.style.overflow = 'hidden';
+      overlay.classList.add('open');
+    }
+
+    function closePanel() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Prev / Next project ──
+    document.getElementById('projPrev').addEventListener('click', () => {
+      const idx = projectList.indexOf(currentProject);
+      if (idx > 0) openProject(projectList[idx - 1]);
+    });
+    document.getElementById('projNext').addEventListener('click', () => {
+      const idx = projectList.indexOf(currentProject);
+      if (idx < projectList.length - 1) openProject(projectList[idx + 1]);
+    });
+
+    // ── Close ──
+    document.getElementById('projClose').addEventListener('click', closePanel);
+    document.getElementById('projBackdrop').addEventListener('click', closePanel);
+
+    document.addEventListener('keydown', e => {
+      if (!overlay.classList.contains('open')) return;
+      if (e.key === 'Escape') closePanel();
+      if (e.key === 'ArrowLeft')  { const idx = projectList.indexOf(currentProject); if (idx > 0) openProject(projectList[idx - 1]); }
+      if (e.key === 'ArrowRight') { const idx = projectList.indexOf(currentProject); if (idx < projectList.length - 1) openProject(projectList[idx + 1]); }
+    });
+
+    // ── Wire up card clicks ──
+    document.querySelectorAll('.work-card').forEach(card => {
+      card.style.cursor = 'none';
+      card.addEventListener('click', () => {
+        openProject(card.querySelector('.card-title').textContent.trim());
+      });
+    });
+    document.querySelectorAll('.card-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.stopPropagation();
+        openProject(link.closest('.work-card').querySelector('.card-title').textContent.trim());
+      });
+    });
+  </script>
+</body>
+</html>
