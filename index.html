@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Sunny Peng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fdf8f8; --ink: #2d2a2e; --muted: #a89faa; --line: #ecdfe8;
+      --pink: #f2c4ce; --blue: #c4d8f2; --green: #c4e0d2;
+      --pink-soft: #faedf0; --blue-soft: #edf3fa; --green-soft: #edf5f0;
+      --accent-pink: #d98ca0; --accent-blue: #7aaad4; --accent-green: #6aab8a;
+      --sun: #e8b84b;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--ink);
+      font-family: var(--mono); font-size: 13px; font-weight: 300;
+      letter-spacing: 0.02em; line-height: 1.7;
+      cursor: none; overflow-x: hidden;
+    }
+    .cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--accent-pink); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transition: transform 0.15s ease, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.hover { transform: translate(-50%, -50%) scale(3); background: var(--accent-blue); }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; background: var(--bg);
+      border-bottom: 1px solid transparent; transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--line); }
+    .nav-logo {
+      font-family: var(--serif); font-size: 25px; font-weight: 300;
+      text-decoration: none; color: var(--ink);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sun-icon { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.7s ease; }
+    .nav-logo:hover .sun-icon { transform: rotate(45deg); }
+    .sun-core { fill: none; stroke: var(--sun); stroke-width: 1.6; transition: fill 0.3s; }
+    .nav-logo:hover .sun-core { fill: rgba(232,184,75,0.14); }
+    .sun-ray { stroke: var(--sun); stroke-width: 1.6; stroke-linecap: round; }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-links > li > a {
+      text-decoration: none; color: var(--muted);
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links > li > a:hover { color: var(--ink); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      text-decoration: none; color: var(--muted);
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s; display: flex; align-items: center; gap: 5px; cursor: none;
+    }
+    .nav-dropdown-toggle::after { content: '▾'; font-size: 9px; transition: transform 0.2s; }
+    .nav-dropdown:hover .nav-dropdown-toggle { color: var(--ink); }
+    .nav-dropdown:hover .nav-dropdown-toggle::after { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 2px); left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--bg); border: 1px solid var(--line); border-radius: 4px;
+      min-width: 200px; padding: 8px 0;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 8px 24px rgba(45,42,46,0.07);
+    }
+    .nav-dropdown-menu::before { content: ''; position: absolute; bottom: 100%; left: 0; right: 0; height: 10px; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a {
+      display: block; padding: 9px 18px; text-decoration: none;
+      font-size: 11px; letter-spacing: 0.06em; text-transform: none;
+      color: var(--muted); transition: color 0.15s, background 0.15s; white-space: nowrap;
+    }
+    .nav-dropdown-menu a:hover { color: var(--ink); background: var(--pink-soft); }
+    .nav-dropdown-menu a.blue-hover:hover { background: var(--blue-soft); }
+    .nav-dropdown-menu a.green-hover:hover { background: var(--green-soft); }
+
+    /* ── Hero ── */
+    #hero { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    .hero-main {
+      flex: 0 0 80%; display: flex; align-items: center;
+      padding: 0 72px; padding-top: 80px;
+    }
+    .hero-eyebrow {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent-pink); margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(72px, 10vw, 148px); font-weight: 300;
+      line-height: 0.98; letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--muted); }
+    .hero-highlight {
+      background: linear-gradient(95deg, var(--accent-pink) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      display: inline-block;
+    }
+    .hero-desc {
+      color: var(--muted); line-height: 1.8; max-width: 440px; margin-top: 32px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+    .hero-bottom {
+      flex: 0 0 20%; border-top: 1px solid var(--line);
+      display: flex; align-items: center; padding: 0 72px;
+      opacity: 0; animation: fadeIn 0.8s ease 0.9s forwards;
+    }
+    .hero-buttons { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--ink);
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      border-bottom: 1px solid var(--pink); padding-bottom: 3px;
+      transition: gap 0.3s, color 0.2s, border-color 0.2s;
+    }
+    .hero-cta:hover { gap: 16px; color: var(--accent-pink); border-color: var(--accent-pink); }
+    .hero-cta.green { border-bottom-color: var(--green); }
+    .hero-cta.green:hover { color: var(--accent-green); border-color: var(--accent-green); }
+
+    /* ── Contact ── */
+    #contact {
+      background: linear-gradient(135deg, var(--pink-soft) 0%, var(--blue-soft) 100%);
+      text-align: center; padding: 120px 48px;
+    }
+    .contact-eyebrow { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-pink); margin-bottom: 20px; }
+    .contact-title { font-family: var(--serif); font-size: clamp(48px, 7vw, 96px); font-weight: 300; line-height: 1; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .contact-title em { font-style: italic; color: var(--muted); }
+    .contact-actions { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .contact-email {
+      display: inline-block; font-family: var(--serif); font-size: 24px; font-weight: 300;
+      text-decoration: none; color: var(--ink);
+      border-bottom: 1px solid var(--accent-pink); padding-bottom: 4px; transition: color 0.2s;
+    }
+    .contact-email:hover { color: var(--accent-pink); }
+    .contact-email-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--accent-pink); color: #fff;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      border: none; padding: 14px 28px; border-radius: 2px; cursor: none;
+      transition: background 0.2s, gap 0.2s;
+    }
+    .contact-email-btn:hover { background: #c87890; gap: 16px; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(45,42,46,0.35);
+      backdrop-filter: blur(4px); z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+      padding: 48px; width: 100%; max-width: 480px;
+      transform: translateY(16px); transition: transform 0.25s; position: relative;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-title { font-family: var(--serif); font-size: 32px; font-weight: 300; margin-bottom: 6px; }
+    .modal-sub { color: var(--muted); font-size: 12px; margin-bottom: 32px; }
+    .modal-close { position: absolute; top: 18px; right: 22px; background: none; border: none; font-size: 18px; color: var(--muted); cursor: none; transition: color 0.2s; }
+    .modal-close:hover { color: var(--ink); }
+    .modal-field { margin-bottom: 18px; }
+    .modal-field label { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .modal-field input, .modal-field textarea {
+      width: 100%; background: none; border: 1px solid var(--line); border-radius: 2px;
+      padding: 10px 14px; font-family: var(--mono); font-size: 13px; color: var(--ink);
+      outline: none; transition: border-color 0.2s; resize: none;
+    }
+    .modal-field input:focus, .modal-field textarea:focus { border-color: var(--accent-pink); }
+    .modal-field textarea { min-height: 110px; }
+    .modal-send {
+      width: 100%; background: var(--accent-pink); color: #fff; border: none; padding: 13px; border-radius: 2px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: none; transition: background 0.2s; margin-top: 6px;
+    }
+    .modal-send:hover { background: #c87890; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 24px 48px; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--line); background: var(--bg);
+      font-size: 10px; letter-spacing: 0.08em; color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { text-decoration: none; color: var(--muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .yt-link { position: relative; display: inline-block; }
+    .yt-tooltip {
+      position: absolute; bottom: calc(100% + 10px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: var(--pink-soft); color: var(--accent-pink);
+      font-size: 10px; white-space: nowrap; padding: 6px 12px;
+      border: 1px solid var(--pink); border-radius: 2px;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s, transform 0.22s; z-index: 10;
+    }
+    .yt-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--pink); }
+    .yt-link:hover .yt-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      #hero { height: auto; min-height: 100vh; }
+      .hero-main { padding: 100px 24px 40px; flex: none; min-height: 70vh; }
+      .hero-bottom { flex: none; padding: 24px; }
+      .hero-buttons { flex-direction: column; gap: 16px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+      .modal { padding: 32px 24px; margin: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="emailModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-title">Get in touch</div>
+      <p class="modal-sub">Send me a message and I'll get back to you soon.</p>
+      <div class="modal-field"><label>Your name</label><input type="text" id="mName" placeholder="Jane Smith"/></div>
+      <div class="modal-field"><label>Your email</label><input type="email" id="mEmail" placeholder="jane@example.com"/></div>
+      <div class="modal-field"><label>Message</label><textarea id="mMessage" placeholder="Tell me about your project…"></textarea></div>
+      <button class="modal-send" id="modalSend">Send message →</button>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">
+      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="sun-core" cx="12" cy="12" r="4.2"/>
+        <line class="sun-ray" x1="12" y1="1.5"  x2="12" y2="4.8"/>
+        <line class="sun-ray" x1="12" y1="19.2" x2="12" y2="22.5"/>
+        <line class="sun-ray" x1="1.5"  y1="12" x2="4.8"  y2="12"/>
+        <line class="sun-ray" x1="19.2" y1="12" x2="22.5" y2="12"/>
+        <line class="sun-ray" x1="4.4"  y1="4.4"  x2="6.6"  y2="6.6"/>
+        <line class="sun-ray" x1="17.4" y1="17.4" x2="19.6" y2="19.6"/>
+        <line class="sun-ray" x1="19.6" y1="4.4"  x2="17.4" y2="6.6"/>
+        <line class="sun-ray" x1="6.6"  y1="17.4" x2="4.4"  y2="19.6"/>
+      </svg>
+      Sunny Peng
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" style="color: var(--ink);">Home</a></li>
+      <li class="nav-dropdown">
+        <a href="work.html" class="nav-dropdown-toggle">Work</a>
+        <div class="nav-dropdown-menu">
+          <a href="work.html#work-ux">UI / UX Design ၄၃˚</a>
+          <a href="work.html#work-graphic" class="blue-hover">Graphic Design ✿˚</a>
+          <a href="work.html#work-merchandise" class="green-hover">Merchandise ☘︎˚</a>
+        </div>
+      </li>
+      <li class="nav-dropdown">
+        <a href="about.html" class="nav-dropdown-toggle">About</a>
+        <div class="nav-dropdown-menu">
+          <a href="about.html#about-me">About Me *ੈ✩‧₊˚</a>
+          <a href="about.html#my-life" class="blue-hover">My Life ⋆˙⟡♡</a>
+          <a href="about.html#my-value" class="blue-hover">My Value ⊹.✮₊⋆</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-main">
+      <div class="hero-text">
+        <p class="hero-eyebrow">UI/UX · Graphic Design · Passionate about Design</p>
+        <h1 class="hero-title">Designing<br><em>human-centred</em><br><span class="hero-highlight">experiences.</span></h1>
+        <p class="hero-desc">I craft digital experiences that feel effortless — balancing visual clarity with purposeful interaction.</p>
+      </div>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-buttons">
+        <a href="work.html#work-ux" class="hero-cta">View UI/UX work →</a>
+        <a href="work.html#work-graphic" class="hero-cta">View Graphic work →</a>
+        <a href="work.html#work-merchandise" class="hero-cta green">View Merchandise →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <p class="contact-eyebrow reveal">Looking forward to working together ୨୧ ‧₊˚</p>
+    <h2 class="contact-title reveal">Say <em>hello.</em></h2>
+    <div class="contact-actions reveal">
+      <a href="mailto:sunnypeng0131@gmail.com" class="contact-email">sunnypeng0131@gmail.com</a>
+      <button class="contact-email-btn" id="openEmailModal">Send me a message →</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span>© 2026 Sunny Peng. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/jiaqian-peng-429333236/" target="_blank">LinkedIn</a>
+      <a href="https://www.youtube.com/@ssweet_0131" target="_blank" class="yt-link">
+        YouTube <span class="yt-tooltip">Channel coming soon ✦</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+    window.addEventListener('scroll', () =>
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20)
+    );
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const modal = document.getElementById('emailModal');
+    document.getElementById('openEmailModal').addEventListener('click', () => modal.classList.add('open'));
+    document.getElementById('modalClose').addEventListener('click',    () => modal.classList.remove('open'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+    document.getElementById('modalSend').addEventListener('click', () => {
+      const name    = document.getElementById('mName').value.trim();
+      const email   = document.getElementById('mEmail').value.trim();
+      const message = document.getElementById('mMessage').value.trim();
+      if (!email || !message) { alert('Please fill in your email and message.'); return; }
+      const s = encodeURIComponent('Portfolio enquiry from ' + (name || 'visitor'));
+      const b = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
+      window.location.href = 'mailto:sunnypeng0131@gmail.com?subject=' + s + '&body=' + b;
+      modal.classList.remove('open');
+    });
+  </script>
+</body>
+</html>
